@@ -82,7 +82,6 @@ jobs:
           image-tag: sysdiglabs/dummy-vuln-app:latest
           # API token for Sysdig Scanning auth.
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-          input-type: docker-archive
           input-path: ${{ github.workspace }}/image.tar
           run-as-user: 1002
           severity-at-least: high
