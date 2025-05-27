@@ -53,7 +53,7 @@ jobs:
           # API token for Sysdig Scanning auth.
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
-          severity-at-least: medium
+          #severity-at-least: medium
           #exclude-accepted: true
           #package-types: os,java
 
