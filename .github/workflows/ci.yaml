@@ -29,10 +29,6 @@ jobs:
           image-tag: registry.access.redhat.com/ubi8/ubi-minimal:8.3-201
           # API token for Sysdig Scanning auth.
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-          # Github App token to publish the checks. By default it will use "github.token value". See https://docs.github.com/en/free-pro-team@latest/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
-          #github-token: # default is ${{ github.token }}
-          # Sysdig Secure URL (ex: "https://secure-sysdig.com").
-          #sysdig-secure-url: https://eu1.app.sysdig.com/
           sysdig-secure-url: https://secure.sysdig.com/
           severity-at-least: high
           exclude-accepted: true
@@ -42,6 +38,30 @@ jobs:
         if: always()
         with:
           sarif_file: ${{ steps.scan.outputs.sarifReport }}         
+
+  scan-from-registry-node:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Sysdig Secure Inline Scan
+        id: scan
+        uses: sysdiglabs/scan-action@additional-filter-options
+        with:
+          # Tag of the image to analyse.
+          image-tag: node:13.0.1
+          # API token for Sysdig Scanning auth.
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://secure.sysdig.com/
+          severity-at-least: high
+          exclude-accepted: true
+          package-types: os,java
+
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarifReport }}  
           
   scan-from-docker-archive:
     runs-on: ubuntu-latest
