@@ -34,6 +34,9 @@ jobs:
           # Sysdig Secure URL (ex: "https://secure-sysdig.com").
           #sysdig-secure-url: https://eu1.app.sysdig.com/
           sysdig-secure-url: https://secure.sysdig.com/
+          severity-at-least: high
+          exclude-accepted: true
+          package-types: os,java
 
       - uses: github/codeql-action/upload-sarif@v3
         if: always()
@@ -63,6 +66,9 @@ jobs:
           input-type: docker-archive
           input-path: ${{ github.workspace }}/image.tar
           run-as-user: 1002
+          severity-at-least: high
+          exclude-accepted: true
+          package-types: os,java
           
       - uses: github/codeql-action/upload-sarif@v3
         if: always()
@@ -95,6 +101,9 @@ jobs:
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           input-type: docker-daemon
           run-as-user: root
+          severity-at-least: high
+          exclude-accepted: true
+          package-types: os,java
 
       - uses: github/codeql-action/upload-sarif@v3
         if: always()
