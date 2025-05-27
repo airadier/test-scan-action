@@ -33,7 +33,6 @@ jobs:
           #exclude-accepted: true
           #package-types: os,java
 
-    steps:
       - id: cat-result
         run: |
           ls -lh
