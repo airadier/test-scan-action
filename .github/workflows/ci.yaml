@@ -33,6 +33,12 @@ jobs:
           #exclude-accepted: true
           #package-types: os,java
 
+    steps:
+      - id: cat-result
+        run: |
+          ls -lh
+          cat scan-result.json
+
       - uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
