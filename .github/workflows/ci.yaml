@@ -29,7 +29,7 @@ jobs:
           sysdig-secure-url: https://secure.sysdig.com/
           severity-at-least: critical
           exclude-accepted: true
-          package-types: java
+          not-package-types: os
 
       - uses: github/codeql-action/upload-sarif@v3
         if: always()
