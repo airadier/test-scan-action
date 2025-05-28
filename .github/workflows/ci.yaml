@@ -12,38 +12,7 @@ on:
 
 jobs:
 
-  scan-from-registry-ubi:
-    runs-on: ubuntu-latest
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: Sysdig Secure Inline Scan
-        id: scan
-        # You may pin to the exact commit or the version.
-        # uses: sysdiglabs/scan-action@e987fddce3e5dd5122fa4af4488fd65cb2b08cd6
-        uses: sysdiglabs/scan-action@additional-filter-options
-        with:
-          # Tag of the image to analyse.
-          image-tag: registry.access.redhat.com/ubi8/ubi-minimal:8.3-201
-          # API token for Sysdig Scanning auth.
-          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-          sysdig-secure-url: https://secure.sysdig.com/
-          severity-at-least: high
-          exclude-accepted: true
-          package-types: os,java
-
-      - id: cat-result
-        run: |
-          ls -lh
-          cat scan-result.json
-
-      - uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarifReport }}         
-
-  scan-from-registry-node:
+  scan-from-registry-node-filters:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -58,80 +27,30 @@ jobs:
           # API token for Sysdig Scanning auth.
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
-          severity-at-least: high
+          severity-at-least: critical
           exclude-accepted: true
-          package-types: javascript
+          package-types: java
 
       - uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: ${{ steps.scan.outputs.sarifReport }}  
           
-  scan-from-docker-archive:
+
+  scan-from-registry-node-no-filters:
     runs-on: ubuntu-latest
     steps:
-      - name: Pull image
-        id: pull-and-save
-        run: |
-          docker pull alpine:3.7
-          docker save alpine:3.7 -o image.tar
-          chmod 0644 image.tar
-          pwd
-          ls -lh
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
-      - name: Scan imagefrom archive
+      - name: Sysdig Secure Inline Scan
         id: scan
         uses: sysdiglabs/scan-action@additional-filter-options
         with:
-          # Tag of the image to analyse
-          image-tag: sysdiglabs/dummy-vuln-app:latest
+          # Tag of the image to analyse.
+          image-tag: node:13.0.1
           # API token for Sysdig Scanning auth.
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-          input-path: ${{ github.workspace }}/image.tar
-          run-as-user: 1002
-          severity-at-least: high
-          exclude-accepted: true
-          package-types: os,java
-          
-      - uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarifReport }}     
+          sysdig-secure-url: https://secure.sysdig.com/
 
           
-      - name: post check
-        run: |
-          ls -lh
-
-  scan-from-docker-daemon:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Pull image
-        id: pull-and-save
-        run: |
-          docker pull debian
-          who am i
-          id
-          ls -l /var/run/docker.sock
-
-      - name: Scan image from Docker Daemon
-        id: scan
-        uses: sysdiglabs/scan-action@additional-filter-options
-        with:
-          # Tag of the image to analyse
-          image-tag: debian
-          # API token for Sysdig Scanning auth.
-          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-          input-type: docker-daemon
-          run-as-user: root
-          severity-at-least: high
-          exclude-accepted: true
-          package-types: os,java
-
-      - uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarifReport }}     
-
-
- 
