@@ -23,7 +23,7 @@ jobs:
         uses: sysdiglabs/scan-action@additional-filter-options
         with:
           # Tag of the image to analyse.
-          image-tag: node:13.0.1
+          image-tag: jenkins/jenkins:2.350-jdk17
           # API token for Sysdig Scanning auth.
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
@@ -48,7 +48,7 @@ jobs:
         uses: sysdiglabs/scan-action@additional-filter-options
         with:
           # Tag of the image to analyse.
-          image-tag: node:13.0.1
+          image-tag: jenkins/jenkins:2.350-jdk17
           # API token for Sysdig Scanning auth.
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
