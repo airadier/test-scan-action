@@ -20,7 +20,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@additional-filter-options
+        uses: sysdiglabs/scan-action@adapt-to-json-v1-format
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
@@ -45,7 +45,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@additional-filter-options
+        uses: sysdiglabs/scan-action@adapt-to-json-v1-format
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
