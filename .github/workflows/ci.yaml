@@ -70,4 +70,9 @@ jobs:
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
 
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarifReport }}  
+          
           
