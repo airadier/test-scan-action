@@ -20,7 +20,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@adapt-to-json-v1-format
+        uses: sysdiglabs/scan-action@v6
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
@@ -45,8 +45,25 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@adapt-to-json-v1-format
+        uses: sysdiglabs/scan-action@v6
         with:
+          # Tag of the image to analyse.
+          image-tag: jenkins/jenkins:2.350-jdk17
+          # API token for Sysdig Scanning auth.
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://secure.sysdig.com/
+
+  scan-from-registry-node-group-by-package:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Sysdig Secure Inline Scan
+        id: scan
+        uses: sysdiglabs/scan-action@v6
+        with:
+          group-by-package: true
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
           # API token for Sysdig Scanning auth.
