@@ -12,7 +12,30 @@ on:
 
 jobs:
 
-  scan-from-registry-filters:
+  scan-from-registry-filter-package-type-severity:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Sysdig Secure Inline Scan
+        id: scan
+        uses: sysdiglabs/scan-action@fix-summary-filtering
+        with:
+          # Tag of the image to analyse.
+          image-tag: jenkins/jenkins:2.350-jdk17
+          # API token for Sysdig Scanning auth.
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://secure.sysdig.com/
+          severity-at-least: critical
+          not-package-types: os
+
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarifReport }}  
+
+  scan-from-registry-filters-package-type-severity-and-accepted:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -35,7 +58,6 @@ jobs:
         if: always()
         with:
           sarif_file: ${{ steps.scan.outputs.sarifReport }}  
-          
 
   scan-from-registry-no-filters:
     runs-on: ubuntu-latest
