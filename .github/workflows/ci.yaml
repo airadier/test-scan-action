@@ -12,7 +12,7 @@ on:
 
 jobs:
 
-  scan-from-registry-node-filters:
+  scan-from-registry-filters:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -20,7 +20,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@fix-package-sort-in-summary
+        uses: sysdiglabs/scan-action@v6
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
@@ -37,7 +37,7 @@ jobs:
           sarif_file: ${{ steps.scan.outputs.sarifReport }}  
           
 
-  scan-from-registry-node-no-filters:
+  scan-from-registry-no-filters:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -45,7 +45,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@fix-package-sort-in-summary
+        uses: sysdiglabs/scan-action@v6
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
@@ -53,7 +53,7 @@ jobs:
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
 
-  scan-from-registry-node-group-by-package:
+  scan-from-registry-group-by-package:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
