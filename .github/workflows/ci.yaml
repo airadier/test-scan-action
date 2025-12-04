@@ -20,7 +20,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@v6.3.1
+        uses: sysdiglabs/scan-action@fix-summary-filtering
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
@@ -43,7 +43,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@v6.3.1
+        uses: sysdiglabs/scan-action@fix-summary-filtering
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
@@ -67,7 +67,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@v6.3.1
+        uses: sysdiglabs/scan-action@fix-summary-filtering
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
@@ -83,7 +83,7 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@v6.3.1
+        uses: sysdiglabs/scan-action@fix-summary-filtering
         with:
           group-by-package: true
           # Tag of the image to analyse.
