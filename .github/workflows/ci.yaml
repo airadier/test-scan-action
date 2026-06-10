@@ -75,6 +75,16 @@ jobs:
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
 
+      - name: Sysdig Bloodhound
+        # Best-effort build-context collection alongside the scan.
+        if: success() || failure()
+        uses: ./.github/actions/sysdig-bloodhound
+        env:
+          SYSDIG_SECURE_API_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+        with:
+          image: jenkins/jenkins:2.350-jdk17
+          sysdig-url: https://secure.sysdig.com/
+
   scan-from-registry-group-by-package:
     runs-on: ubuntu-latest
     steps:
