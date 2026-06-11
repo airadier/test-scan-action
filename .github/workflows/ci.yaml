@@ -20,12 +20,12 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@fix-package-filter-casing
+        uses: sysdiglabs/scan-action@v5
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
           # API token for Sysdig Scanning auth.
-          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_API_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
           severity-at-least: critical
           not-package-types: Java
@@ -43,12 +43,12 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@fix-package-filter-casing
+        uses: sysdiglabs/scan-action@v5
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
           # API token for Sysdig Scanning auth.
-          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_API_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
           severity-at-least: critical
           exclude-accepted: true
@@ -67,13 +67,23 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@fix-package-filter-casing
+        uses: sysdiglabs/scan-action@v5
         with:
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
           # API token for Sysdig Scanning auth.
-          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_API_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
+
+      - name: Sysdig Bloodhound
+        # Best-effort build-context collection alongside the scan.
+        if: success() || failure()
+        uses: ./.github/actions/sysdig-bloodhound
+        env:
+          SYSDIG_SECURE_API_TOKEN: ${{ secrets.SYSDIG_SECURE_API_TOKEN }}
+        with:
+          image: jenkins/jenkins:2.350-jdk17
+          sysdig-url: https://secure.sysdig.com/
 
   scan-from-registry-group-by-package:
     runs-on: ubuntu-latest
@@ -83,13 +93,13 @@ jobs:
 
       - name: Sysdig Secure Inline Scan
         id: scan
-        uses: sysdiglabs/scan-action@fix-package-filter-casing
+        uses: sysdiglabs/scan-action@v5
         with:
           group-by-package: true
           # Tag of the image to analyse.
           image-tag: jenkins/jenkins:2.350-jdk17
           # API token for Sysdig Scanning auth.
-          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_API_TOKEN }}
           sysdig-secure-url: https://secure.sysdig.com/
 
       - uses: github/codeql-action/upload-sarif@v3
