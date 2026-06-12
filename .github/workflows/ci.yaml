@@ -84,6 +84,7 @@ jobs:
         with:
           image: jenkins/jenkins:2.350-jdk17
           sysdig-url: https://secure.sysdig.com/
+          scan-result: ${{ steps.scan.outputs.scanReport }}
 
   scan-from-registry-group-by-package:
     runs-on: ubuntu-latest
